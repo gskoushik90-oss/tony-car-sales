@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tony Car Sales — St. Louis</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;--orange:#ff6b00;--orange2:#ff9a3c;--red:#e63000;--white:#ffffff;--gray:#888888;--lightgray:#cccccc;--border:#2a2a2a;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;cursor:none;}
+.cursor{position:fixed;width:12px;height:12px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:difference;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--orange);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:all 0.15s ease;opacity:0.6;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#0a0a0a;}::-webkit-scrollbar-thumb{background:var(--orange);}
+.page{display:none;min-height:100vh;}.page.active{display:block;}
+nav{position:fixed;top:0;width:100%;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:18px 5%;background:rgba(10,10,10,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,107,0,0.15);}
+.nav-logo{cursor:none;}
+.tony-logo{font-family:'Black Ops One',cursive;font-size:1.8rem;color:var(--orange);text-shadow:0 0 20px rgba(255,107,0,0.6);animation:glow 2s ease-in-out infinite;letter-spacing:2px;}
+.rest-logo{font-family:'Orbitron',monospace;font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:3px;display:block;margin-top:2px;}
+@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(255,107,0,0.6),0 0 40px rgba(255,107,0,0.3);}50%{text-shadow:0 0 35px rgba(255,107,0,1),0 0 70px rgba(255,107,0,0.5);}}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;transition:color 0.3s;cursor:none;}
+.nav-links a:hover{color:var(--orange);}
+.nav-btn{background:var(--orange);color:#000;padding:9px 20px;font-size:0.76rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;border:none;cursor:none;transition:all 0.3s;border-radius:2px;}
+.nav-btn:hover{background:var(--orange2);}
+.user-pill{background:var(--surface2);border:1px solid var(--border);padding:7px 14px;font-size:0.76rem;color:var(--orange);display:none;align-items:center;gap:8px;border-radius:2px;}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--gray);padding:7px 14px;font-size:0.74rem;cursor:none;transition:all 0.3s;display:none;border-radius:2px;}
+.logout-btn:hover{border-color:var(--orange);color:var(--orange);}
+.hero{height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(255,107,0,0.12) 0%,transparent 60%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.04) 1px,transparent 1px);background-size:80px 80px;}
+.hero-scan{position:absolute;width:200%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,0,0.4),transparent);top:38%;animation:scan 4s linear infinite;}
+@keyframes scan{from{left:-100%;}to{left:100%;}}
+.hero-content{position:relative;z-index:2;padding:0 5%;animation:fadeIn 1s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
+.hero-tag{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,107,0,0.4);padding:7px 16px;margin-bottom:24px;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);}
+.hero-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero h1{font-family:'Bebas Neue',cursive;font-size:clamp(3.5rem,9vw,8rem);line-height:0.92;color:var(--white);}
+.h1-tony{font-family:'Black Ops One',cursive;color:var(--orange);font-size:clamp(4.5rem,12vw,11rem);display:block;animation:glow 2s infinite;}
+.h1-line2{color:transparent;-webkit-text-stroke:2px var(--orange);display:block;}
+.hero-sub{color:rgba(255,255,255,0.5);font-size:0.95rem;font-weight:300;margin:22px 0 36px;max-width:480px;line-height:1.7;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-fire{background:linear-gradient(135deg,var(--red),var(--orange));color:#000;padding:14px 36px;font-weight:700;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;border:none;cursor:none;transition:all 0.3s;border-radius:2px;}
+.btn-fire:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(255,107,0,0.4);}
+.btn-ghost{background:transparent;color:var(--white);padding:14px 36px;border:1px solid rgba(255,255,255,0.2);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all 0.3s;border-radius:2px;}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);}
+.hero-stats{position:absolute;right:5%;bottom:10%;display:flex;flex-direction:column;gap:20px;}
+.stat-n{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;color:var(--orange);display:block;}
+.stat-l{font-size:0.66rem;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
+.marquee-bar{background:var(--orange);padding:10px 0;overflow:hidden;}
+.marquee-track{display:flex;gap:60px;animation:mar 20s linear infinite;white-space:nowrap;}
+.marquee-item{font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:3px;color:#000;display:flex;align-items:center;gap:60px;}
+@keyframes mar{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+section{padding:80px 5%;}
+.s-label{font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:10px;}
+.s-title{font-family:'Bebas Neue',cursive;font-size:clamp(2rem,4.5vw,3.5rem);color:var(--white);line-height:1;}
+.s-sub{color:var(--gray);font-size:0.86rem;font-weight:300;margin-top:10px;max-width:480px;line-height:1.6;}
+.filter-bar{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;}
+.filter-btn{background:transparent;border:1px solid var(--border);color:var(--gray);padding:7px 16px;font-size:0.74rem;letter-spacing:1px;text-transform:uppercase;cursor:none;transition:all 0.3s;border-radius:2px;}
+.filter-btn.active,.filter-btn:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,107,0,0.07);}
+.cars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:2px;}
+.car-card{background:var(--surface);position:relative;overflow:hidden;transition:transform 0.4s cubic-bezier(0.23,1,0.32,1);cursor:none;}
+.car-card:hover{transform:scale(1.02);z-index:2;}.car-card:hover .car-overlay{opacity:1;}
+.car-img{height:200px;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a1a1a,#111);display:flex;align-items:center;justify-content:center;}
+.car-photo{width:100%;height:100%;object-fit:cover;}
+.car-ph{font-size:4rem;}
+.car-glow{position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,107,0,0.08),transparent 70%);}
+.car-badge{position:absolute;top:10px;left:10px;z-index:2;background:var(--orange);color:#000;font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;font-weight:700;}
+.car-overlay{position:absolute;inset:0;background:rgba(255,107,0,0.92);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;z-index:3;}
+.ov-btn{background:#000;color:var(--orange);padding:11px 24px;border:none;font-size:0.76rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:none;border-radius:2px;}
+.ov-btn:hover{background:var(--white);}
+.car-body{padding:18px 18px 20px;}
+.car-make{font-size:0.66rem;color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.car-name{font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--white);margin-bottom:7px;}
+.car-specs{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.sp{font-size:0.7rem;color:var(--gray);display:flex;align-items:center;gap:4px;}
+.sp-dot{width:3px;height:3px;background:var(--orange);border-radius:50%;}
+.car-desc{color:var(--gray);font-size:0.76rem;line-height:1.5;margin-bottom:12px;}
+.car-pr{display:flex;align-items:center;justify-content:space-between;}
+.price{font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--orange);font-weight:700;}
+.td-btn{background:transparent;border:1px solid var(--orange);color:var(--orange);padding:7px 13px;font-size:0.68rem;letter-spacing:1px;text-transform:uppercase;cursor:none;transition:all 0.3s;border-radius:2px;}
+.td-btn:hover{background:var(--orange);color:#000;}
+.no-cars{text-align:center;padding:70px 20px;color:var(--gray);}
+.why-section{padding:80px 5%;background:var(--surface);position:relative;overflow:hidden;}
+.why-section::before{content:'TONY';position:absolute;right:-2%;top:50%;transform:translateY(-50%);font-family:'Black Ops One',cursive;font-size:20vw;color:rgba(255,107,0,0.025);pointer-events:none;}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:50px;}
+.why-card{background:var(--bg);padding:32px 26px;border-top:2px solid transparent;transition:all 0.3s;}
+.why-card:hover{border-color:var(--orange);transform:translateY(-4px);}
+.why-n{font-family:'Orbitron',monospace;font-size:2.5rem;font-weight:900;color:rgba(255,107,0,0.12);margin-bottom:16px;display:block;}
+.why-card h3{font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--white);margin-bottom:8px;letter-spacing:1px;}
+.why-card p{color:var(--gray);font-size:0.82rem;line-height:1.7;}
+.auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;padding-top:80px;}
+.auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,107,0,0.07) 0%,transparent 70%);}
+.auth-box{position:relative;z-index:2;background:var(--surface);border:1px solid var(--border);padding:44px 40px;width:100%;max-width:400px;animation:pop 0.5s ease both;}
+@keyframes pop{from{opacity:0;transform:scale(0.96);}to{opacity:1;transform:scale(1);}}
+.a-logo{text-align:center;margin-bottom:28px;}
+.a-title{font-family:'Bebas Neue',cursive;font-size:1.6rem;color:var(--white);margin-bottom:5px;letter-spacing:1px;}
+.a-sub{color:var(--gray);font-size:0.82rem;margin-bottom:26px;line-height:1.5;}
+.inp-lbl{display:block;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:6px;}
+.inp-grp{margin-bottom:16px;}
+.ph-wrap{display:flex;}
+.cc{background:var(--surface2);border:1px solid var(--border);border-right:none;color:rgba(255,255,255,0.5);padding:0 13px;font-size:0.86rem;display:flex;align-items:center;}
+.a-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.86rem;outline:none;transition:border-color 0.3s;}
+.a-input:focus{border-color:var(--orange);}
+.a-input::placeholder{color:rgba(255,255,255,0.18);}
+.otp-row{display:flex;gap:8px;}
+.otp-i{flex:1;text-align:center;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:14px 6px;font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;outline:none;transition:border-color 0.3s;}
+.otp-i:focus{border-color:var(--orange);}
+.a-btn{width:100%;background:linear-gradient(135deg,var(--red),var(--orange));color:#000;border:none;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:none;transition:all 0.3s;margin-top:6px;border-radius:2px;}
+.a-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,0,0.3);}
+.a-btn:disabled{opacity:0.5;}
+.a-switch{text-align:center;margin-top:18px;font-size:0.78rem;color:var(--gray);}
+.a-switch a{color:var(--orange);text-decoration:none;cursor:none;}
+.resend{background:none;border:none;color:var(--orange);font-size:0.78rem;cursor:none;display:block;text-align:center;width:100%;margin-top:12px;opacity:0.7;}
+.resend:hover{opacity:1;}
+.otp-hint{text-align:center;font-size:0.74rem;color:var(--gray);margin-bottom:16px;line-height:1.5;}
+.otp-hint strong{color:var(--orange);}
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);width:100%;max-width:460px;padding:36px;position:relative;animation:pop 0.4s ease both;}
+.modal-close{position:absolute;top:13px;right:13px;background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:none;}
+.modal-close:hover{color:var(--orange);}
+.modal-car{font-family:'Bebas Neue',cursive;font-size:1.5rem;color:var(--orange);margin-bottom:2px;}
+.modal-title{font-family:'Bebas Neue',cursive;font-size:1rem;color:rgba(255,255,255,0.5);margin-bottom:20px;letter-spacing:1px;}
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.f-sel{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.86rem;outline:none;}
+.suc-wrap{text-align:center;padding:14px 0;}
+.suc-wrap h3{font-family:'Bebas Neue',cursive;font-size:1.6rem;color:var(--orange);margin:12px 0 7px;}
+.suc-wrap p{color:var(--gray);font-size:0.82rem;line-height:1.6;}
+.admin-page{padding-top:80px;min-height:100vh;}
+.adm-hero{padding:42px 5%;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.adm-hero h1{font-family:'Bebas Neue',cursive;font-size:2.2rem;color:var(--white);}
+.adm-hero p{color:var(--gray);font-size:0.82rem;margin-top:3px;}
+.adm-content{padding:32px 5%;}
+.adm-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:32px;overflow-x:auto;}
+.adm-tab{background:none;border:none;color:var(--gray);padding:11px 22px;font-size:0.76rem;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all 0.3s;border-bottom:2px solid transparent;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.adm-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.adm-panel{display:none;}.adm-panel.active{display:block;}
+.up-form{background:var(--surface);border:1px solid var(--border);padding:32px;max-width:680px;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg-full{grid-column:1/-1;}
+.fl{display:block;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:6px;}
+.fi{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:11px 12px;font-family:'DM Sans',sans-serif;font-size:0.84rem;outline:none;transition:border-color 0.3s;border-radius:2px;}
+.fi:focus{border-color:var(--orange);}
+.fi::placeholder{color:rgba(255,255,255,0.18);}
+.up-area{border:2px dashed var(--border);padding:28px;text-align:center;cursor:none;transition:all 0.3s;grid-column:1/-1;}
+.up-area:hover,.up-area.drag{border-color:var(--orange);background:rgba(255,107,0,0.03);}
+.up-area p{color:var(--gray);font-size:0.82rem;line-height:1.6;}
+.up-area strong{color:var(--orange);}
+.ph-prev{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
+.ph-th{width:68px;height:54px;object-fit:cover;border:1px solid var(--border);}
+.add-btn{grid-column:1/-1;background:linear-gradient(135deg,var(--red),var(--orange));color:#000;border:none;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:none;margin-top:14px;transition:all 0.3s;border-radius:2px;}
+.add-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,0,0.3);}
+.add-btn:disabled{opacity:0.5;}
+.bk-table{width:100%;border-collapse:collapse;}
+.bk-table th{text-align:left;padding:11px 13px;font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--border);}
+.bk-table td{padding:13px 13px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+.bk-table tr:hover td{background:rgba(255,107,0,0.03);}
+.s-badge{padding:3px 9px;font-size:0.62rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;border-radius:2px;}
+.s-pending{background:rgba(255,107,0,0.15);color:var(--orange);}
+.s-confirmed{background:rgba(0,200,100,0.15);color:#00c864;}
+.s-done{background:rgba(100,100,100,0.15);color:var(--gray);}
+.ac-btn{background:none;border:1px solid var(--border);color:var(--gray);padding:4px 10px;font-size:0.66rem;cursor:none;transition:all 0.2s;margin-right:4px;border-radius:2px;}
+.ac-btn:hover{border-color:var(--orange);color:var(--orange);}
+.mn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.mn-card{background:var(--surface);border:1px solid var(--border);padding:16px;}
+.mn-img{height:110px;object-fit:cover;width:100%;margin-bottom:10px;}
+.mn-ph{height:110px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin-bottom:10px;}
+.mn-name{font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--white);}
+.mn-price{color:var(--orange);font-family:'Orbitron',monospace;font-size:0.84rem;margin-top:2px;}
+.mn-actions{display:flex;gap:6px;margin-top:10px;}
+.del-btn{background:rgba(230,48,0,0.1);border:1px solid rgba(230,48,0,0.3);color:#e63000;padding:5px 11px;font-size:0.68rem;cursor:none;transition:all 0.2s;border-radius:2px;}
+.del-btn:hover{background:rgba(230,48,0,0.2);}
+.an-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:28px;}
+.an-card{background:var(--surface);border:1px solid var(--border);padding:22px;}
+.an-num{font-family:'Orbitron',monospace;font-size:1.8rem;color:var(--orange);font-weight:700;}
+.an-lbl{color:var(--gray);font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.vw-table{width:100%;border-collapse:collapse;margin-top:16px;}
+.vw-table th{text-align:left;padding:9px 11px;font-size:0.64rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--border);}
+.vw-table td{padding:11px 11px;font-size:0.78rem;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--lightgray);}
+.contact-section{padding:70px 5%;background:var(--surface);}
+.cc-cards{display:flex;flex-direction:column;gap:12px;margin-top:28px;max-width:520px;}
+.cc-card{display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg);border:1px solid var(--border);}
+.cc-icon{font-size:1.3rem;}
+.cc-lbl{font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:2px;}
+.cc-val{color:var(--white);font-size:0.86rem;}
+.toast{position:fixed;bottom:26px;right:26px;z-index:9999;background:var(--orange);color:#000;padding:12px 20px;font-weight:700;font-size:0.8rem;transform:translateY(80px);opacity:0;transition:all 0.4s cubic-bezier(0.23,1,0.32,1);border-radius:2px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,0.3);border-top-color:#000;border-radius:50%;animation:sp 0.6s linear infinite;margin-right:7px;vertical-align:middle;}
+@keyframes sp{to{transform:rotate(360deg);}}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+footer p{color:rgba(255,255,255,0.22);font-size:0.74rem;}
+@media(max-width:768px){.nav-links{display:none;}.hero h1{font-size:3rem;}.h1-tony{font-size:4.5rem;}.hero-stats{display:none;}.why-grid{grid-template-columns:1fr;}.fg{grid-template-columns:1fr;}.auth-box,.adm-hero{flex-direction:column;align-items:flex-start;}.auth-box{padding:26px 18px;}.date-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cr"></div>
+<div class="toast" id="toast"></div>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">
+    <span class="tony-logo">TONY</span>
+    <span class="rest-logo">CAR SALES</span>
+  </div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('cars')">Inventory</a>
+    <a href="#why">Why Us</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div id="navArea" style="display:flex;align-items:center;gap:10px;">
+    <div class="user-pill" id="userPill">👤 <span id="userNum"></span></div>
+    <button class="logout-btn" id="logoutBtn" onclick="logout()">Sign Out</button>
+    <button class="nav-btn" id="loginBtn" onclick="showPage('auth')">Sign In</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div>
+    <div class="hero-content">
+      <div class="hero-tag"><span class="hero-dot"></span>St. Louis's #1 Used Car Dealer</div>
+      <h1><span class="h1-tony">TONY</span>CAR SALES<span class="h1-line2">&amp; SERVICE</span></h1>
+      <p class="hero-sub">Affordable. Reliable. Yours. Every car hand-picked and inspected by Tony — honest prices, no hidden fees.</p>
+      <div class="hero-btns">
+        <button class="btn-fire" onclick="showPage('cars')">🚗 Browse Cars</button>
+        <button class="btn-ghost" onclick="showPage('auth')">Book Test Drive</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-n" id="statCars">0</span><span class="stat-l">Cars Available</span></div>
+      <div><span class="stat-n">100%</span><span class="stat-l">Inspected</span></div>
+      <div><span class="stat-n">$0</span><span class="stat-l">Hidden Fees</span></div>
+    </div>
+  </section>
+  <div class="marquee-bar"><div class="marquee-track"><div class="marquee-item">AFFORDABLE PRICES ◆ QUALITY USED CARS ◆ TEST DRIVE TODAY ◆ ST. LOUIS MO ◆ INSPECTED & CERTIFIED ◆ TONY CAR SALES ◆ AFFORDABLE PRICES ◆ QUALITY USED CARS ◆ TEST DRIVE TODAY ◆ ST. LOUIS MO ◆ INSPECTED & CERTIFIED ◆ TONY CAR SALES</div></div></div>
+  <section style="padding:80px 5%;background:var(--bg);">
+    <div style="margin-bottom:44px;"><span class="s-label">Fresh Inventory</span><h2 class="s-title">FEATURED CARS</h2><p class="s-sub">Hand-picked by Tony. What you see is what you get.</p></div>
+    <div class="cars-grid" id="featGrid"><div class="no-cars"><p>Loading...</p></div></div>
+    <div style="text-align:center;margin-top:32px;"><button class="btn-fire" onclick="showPage('cars')">View All Cars →</button></div>
+  </section>
+  <section class="why-section" id="why">
+    <span class="s-label">Why Tony?</span><h2 class="s-title">WE DO IT DIFFERENT</h2>
+    <div class="why-grid">
+      <div class="why-card"><span class="why-n">01</span><h3>Every Car Inspected</h3><p>Tony personally checks every vehicle. No lemons, no surprises — just cars you can trust.</p></div>
+      <div class="why-card"><span class="why-n">02</span><h3>Honest Prices</h3><p>No dealer fees, no hidden charges. What you see is exactly what you pay.</p></div>
+      <div class="why-card"><span class="why-n">03</span><h3>Test Drive Anytime</h3><p>Sign in with your phone, pick a time, and come feel it. No pressure, ever.</p></div>
+    </div>
+  </section>
+  <section class="contact-section" id="contact">
+    <span class="s-label">Get In Touch</span><h2 class="s-title">TALK TO TONY</h2>
+    <div class="cc-cards">
+      <div class="cc-card"><div class="cc-icon">📞</div><div><div class="cc-lbl">Call or Text</div><div class="cc-val">Add your phone number here</div></div></div>
+      <div class="cc-card"><div class="cc-icon">📍</div><div><div class="cc-lbl">Location</div><div class="cc-val">St. Louis, Missouri</div></div></div>
+      <div class="cc-card"><div class="cc-icon">🕐</div><div><div class="cc-lbl">Hours</div><div class="cc-val">Mon–Sat 9AM–7PM · Sun 11AM–5PM</div></div></div>
+    </div>
+  </section>
+  <footer><div><div class="tony-logo" style="font-size:1.3rem;">TONY</div><span class="rest-logo">CAR SALES & SERVICE</span></div><p>© 2025 Tony Car Sales. St. Louis, MO.</p></footer>
+</div>
+
+<!-- CARS PAGE -->
+<div class="page" id="page-cars">
+  <div style="padding-top:80px;">
+    <div style="padding:46px 5%;border-bottom:1px solid var(--border);"><h1 style="font-family:'Bebas Neue',cursive;font-size:2.8rem;">OUR INVENTORY</h1><p style="color:var(--gray);font-size:0.86rem;margin-top:5px;">All vehicles personally inspected · Honest prices · No dealer fees</p></div>
+    <div style="padding:32px 5%;">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterCars('all',this)">All</button>
+        <button class="filter-btn" onclick="filterCars('sedan',this)">Sedans</button>
+        <button class="filter-btn" onclick="filterCars('suv',this)">SUVs</button>
+        <button class="filter-btn" onclick="filterCars('truck',this)">Trucks</button>
+      </div>
+      <div class="cars-grid" id="allGrid"><div class="no-cars"><p>Loading...</p></div></div>
+    </div>
+    <footer style="margin-top:40px;"><div><div class="tony-logo" style="font-size:1.3rem;">TONY</div><span class="rest-logo">CAR SALES</span></div><p>© 2025 Tony Car Sales.</p></footer>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div class="page" id="page-auth">
+  <div class="auth-page">
+    <div class="auth-bg"></div>
+    <div class="auth-box">
+      <div class="a-logo"><div class="tony-logo" style="font-size:2rem;">TONY</div><span class="rest-logo">CAR SALES</span></div>
+      <div id="step1">
+        <div class="a-title">SIGN IN / SIGN UP</div>
+        <div class="a-sub">Enter your phone. We'll text you a 4-digit code instantly.</div>
+        <div class="inp-grp"><label class="inp-lbl">Phone Number</label>
+          <div class="ph-wrap"><div class="cc">🇺🇸 +1</div><input class="a-input" type="tel" id="phoneIn" placeholder="3140000000" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')"/></div>
+        </div>
+        <button class="a-btn" id="sendBtn" onclick="sendOTP()">Send Code →</button>
+        <div class="a-switch">New? We create your account automatically.</div>
+      </div>
+      <div id="step2" style="display:none;">
+        <div class="a-title">ENTER YOUR CODE</div>
+        <div class="otp-hint">Code sent to <strong id="otpPhone"></strong></div>
+        <div class="inp-grp"><label class="inp-lbl">4-Digit Code</label>
+          <div class="otp-row">
+            <input class="otp-i" type="text" maxlength="1" id="o0" oninput="oNext(this,1)" onkeydown="oPrev(event,this,null)"/>
+            <input class="otp-i" type="text" maxlength="1" id="o1" oninput="oNext(this,2)" onkeydown="oPrev(event,this,0)"/>
+            <input class="otp-i" type="text" maxlength="1" id="o2" oninput="oNext(this,3)" onkeydown="oPrev(event,this,1)"/>
+            <input class="otp-i" type="text" maxlength="1" id="o3" oninput="oNext(this,-1)" onkeydown="oPrev(event,this,2)"/>
+          </div>
+        </div>
+        <button class="a-btn" id="verBtn" onclick="verifyOTP()">Verify & Enter →</button>
+        <button class="resend" onclick="sendOTP()">Resend Code</button>
+        <div class="a-switch"><a href="#" onclick="back1()">← Change Number</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="page" id="page-admin">
+  <div class="admin-page">
+    <div id="admLogin" style="display:none;max-width:340px;margin:100px auto;padding:0 20px;">
+      <div class="a-logo" style="text-align:left;margin-bottom:22px;"><div class="tony-logo" style="font-size:1.6rem;">ADMIN</div><span class="rest-logo">TONY CAR SALES</span></div>
+      <div class="inp-grp"><label class="inp-lbl">Admin Password</label><input class="a-input" type="password" id="admPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')admLogin()"/></div>
+      <button class="a-btn" onclick="admLogin()">Access Dashboard →</button>
+    </div>
+    <div id="admDash" style="display:none;">
+      <div class="adm-hero">
+        <div><h1>ADMIN DASHBOARD</h1><p id="admGreet">Welcome back, Tony</p></div>
+        <button class="btn-fire" onclick="showPage('home')">← Back to Site</button>
+      </div>
+      <div class="adm-content">
+        <div class="adm-tabs">
+          <button class="adm-tab active" onclick="swTab('upload',this)">Upload Car</button>
+          <button class="adm-tab" onclick="swTab('manage',this)">Manage Cars</button>
+          <button class="adm-tab" onclick="swTab('bookings',this)">Bookings</button>
+          <button class="adm-tab" onclick="swTab('analytics',this)">Who's Looking</button>
+        </div>
+
+        <div class="adm-panel active" id="tab-upload">
+          <div class="up-form">
+            <h3 style="font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--white);margin-bottom:20px;letter-spacing:1px;">ADD NEW CAR</h3>
+            <div class="fg">
+              <div><label class="fl">Make</label><input class="fi" id="uMk" placeholder="Toyota"/></div>
+              <div><label class="fl">Model</label><input class="fi" id="uMo" placeholder="Camry"/></div>
+              <div><label class="fl">Year</label><input class="fi" id="uYr" type="number" placeholder="2019"/></div>
+              <div><label class="fl">Price ($)</label><input class="fi" id="uPr" type="number" placeholder="12500"/></div>
+              <div><label class="fl">Mileage</label><input class="fi" id="uMi" placeholder="45,000 mi"/></div>
+              <div><label class="fl">Category</label><select class="fi" id="uCat" style="cursor:none;"><option value="sedan">Sedan</option><option value="suv">SUV</option><option value="truck">Truck</option></select></div>
+              <div><label class="fl">Color</label><input class="fi" id="uCo" placeholder="Pearl White"/></div>
+              <div><label class="fl">Transmission</label><select class="fi" id="uTr" style="cursor:none;"><option value="Automatic">Automatic</option><option value="Manual">Manual</option></select></div>
+              <div class="fg-full"><label class="fl">Description</label><input class="fi" id="uDe" placeholder="Clean title, new tires, Bluetooth..."/></div>
+              <div class="fg-full up-area" id="upArea" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="doDrop(event)">
+                <div style="font-size:2rem;margin-bottom:8px;">📸</div>
+                <p><strong>Upload Car Photos</strong><br/>Drag & drop or click to select · JPG, PNG up to 10MB</p>
+                <input type="file" id="photoIn" multiple accept="image/*" style="display:none" onchange="prevPhotos(this)"/>
+                <button onclick="document.getElementById('photoIn').click()" style="margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--gray);padding:6px 16px;cursor:none;font-size:0.74rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">Browse</button>
+                <div class="ph-prev" id="phPrev"></div>
+              </div>
+              <button class="add-btn fg-full" id="addBtn" onclick="addCar()">+ Add to Inventory</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-panel" id="tab-manage">
+          <div class="mn-grid" id="mnGrid"><p style="color:var(--gray);">Loading...</p></div>
+        </div>
+
+        <div class="adm-panel" id="tab-bookings">
+          <div style="overflow-x:auto;">
+            <table class="bk-table"><thead><tr><th>Customer</th><th>Car</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead><tbody id="bkBody"></tbody></table>
+            <div id="noBk" style="text-align:center;padding:50px;color:var(--gray);display:none;"><div style="font-size:2.5rem;margin-bottom:12px;">📅</div><p>No bookings yet.</p></div>
+          </div>
+        </div>
+
+        <div class="adm-panel" id="tab-analytics">
+          <div class="an-grid" id="anStats"></div>
+          <h3 style="font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--white);margin-bottom:14px;letter-spacing:1px;">WHO VIEWED WHICH CAR</h3>
+          <div style="overflow-x:auto;"><table class="vw-table"><thead><tr><th>Phone</th><th>Car</th><th>When</th></tr></thead><tbody id="vwBody"></tbody></table>
+          <div id="noVw" style="text-align:center;padding:36px;color:var(--gray);display:none;">No views tracked yet.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="tdModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="tdForm">
+      <div class="modal-car" id="modCar"></div>
+      <div class="modal-title">BOOK A TEST DRIVE</div>
+      <div class="inp-grp"><label class="inp-lbl">Your Name</label><input class="a-input" id="tdNm" placeholder="Full name"/></div>
+      <div class="date-row">
+        <div class="inp-grp"><label class="inp-lbl">Date</label><input class="a-input" id="tdDt" type="date"/></div>
+        <div class="inp-grp"><label class="inp-lbl">Time</label><select class="a-input f-sel" id="tdTm" style="cursor:none;"><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option></select></div>
+      </div>
+      <div class="inp-grp" style="margin-top:6px;"><label class="inp-lbl">Notes (optional)</label><input class="a-input" id="tdNt" placeholder="Any questions?"/></div>
+      <button class="a-btn" id="tdBtn" onclick="submitBooking()">Confirm Booking →</button>
+    </div>
+    <div class="suc-wrap" id="tdSuc" style="display:none;">
+      <div style="font-size:2.8rem;">🎉</div>
+      <h3>YOU'RE BOOKED!</h3>
+      <p>Tony will reach out to confirm. See you soon!</p>
+      <button class="a-btn" style="margin-top:16px;max-width:160px;margin-left:auto;margin-right:auto;display:block;" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// CONFIG — change this to your Render URL after deploying
+const API = window.location.hostname==='localhost' ? 'http://localhost:3000' : '';
+
+let token = localStorage.getItem('tcs_token');
+let phone = localStorage.getItem('tcs_phone');
+let admToken = sessionStorage.getItem('tcs_admin');
+let selCar = null;
+let allCars = [];
+let curFilter = 'all';
+
+// Cursor
+const cur=document.getElementById('cursor'),cr=document.getElementById('cr');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';cr.style.left=e.clientX+'px';cr.style.top=e.clientY+'px';});
+
+function showPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  window.scrollTo(0,0);
+  if(n==='home')loadFeat();
+  if(n==='cars')loadAll();
+  if(n==='admin')initAdm();
+}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+function updateNav(){
+  const p=document.getElementById('userPill'),l=document.getElementById('logoutBtn'),b=document.getElementById('loginBtn');
+  if(token&&phone){p.style.display='flex';document.getElementById('userNum').textContent=phone;l.style.display='block';b.style.display='none';}
+  else{p.style.display='none';l.style.display='none';b.style.display='block';}
+}
+function logout(){token=null;phone=null;localStorage.removeItem('tcs_token');localStorage.removeItem('tcs_phone');updateNav();showPage('home');toast('Signed out');}
+
+// AUTH
+async function sendOTP(){
+  const p=document.getElementById('phoneIn').value.trim();
+  if(p.length<10){toast('Enter a valid 10-digit number');return;}
+  const btn=document.getElementById('sendBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Sending...';
+  try{
+    const r=await fetch(API+'/api/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:p})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error);
+    document.getElementById('otpPhone').textContent='+1 '+p.slice(0,3)+'-'+p.slice(3,6)+'-'+p.slice(6);
+    document.getElementById('step1').style.display='none';document.getElementById('step2').style.display='block';
+    document.getElementById('o0').focus();toast('Code sent to your phone ✓');
+  }catch(e){toast('Error: '+e.message);}
+  btn.disabled=false;btn.innerHTML='Send Code →';
+}
+function oNext(i,n){i.value=i.value.replace(/\D/g,'');if(i.value.length===1&&n>=0)document.getElementById('o'+n).focus();}
+function oPrev(e,i,p){if(e.key==='Backspace'&&!i.value&&p!==null)document.getElementById('o'+p).focus();}
+function back1(){document.getElementById('step2').style.display='none';document.getElementById('step1').style.display='block';[0,1,2,3].forEach(i=>document.getElementById('o'+i).value='');}
+async function verifyOTP(){
+  const p=document.getElementById('phoneIn').value.trim();
+  const otp=[0,1,2,3].map(i=>document.getElementById('o'+i).value).join('');
+  if(otp.length<4){toast('Enter all 4 digits');return;}
+  const btn=document.getElementById('verBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Verifying...';
+  try{
+    const r=await fetch(API+'/api/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:p,otp})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error);
+    token=d.token;phone=d.phone;localStorage.setItem('tcs_token',token);localStorage.setItem('tcs_phone',phone);
+    updateNav();toast('Welcome to Tony Car Sales! 🚗');showPage('cars');
+  }catch(e){toast(e.message);[0,1,2,3].forEach(i=>document.getElementById('o'+i).value='');document.getElementById('o0').focus();}
+  btn.disabled=false;btn.innerHTML='Verify & Enter →';
+}
+
+// CARS
+function emo(c){return c==='suv'?'🚙':c==='truck'?'🛻':'🚗';}
+function cardHTML(car,full=false){
+  const ph=car.photos&&car.photos[0]?`<img class="car-photo" src="${car.photos[0]}" alt="${car.make} ${car.model}" loading="lazy"/>`:`<span class="car-ph">${emo(car.category)}</span>`;
+  return `<div class="car-card" data-cat="${car.category}">
+    <div class="car-img">${ph}<div class="car-glow"></div><div class="car-badge">FOR SALE</div>
+    <div class="car-overlay"><button class="ov-btn" onclick="openTD('${car.id}','${car.year} ${car.make} ${car.model}')">Book Test Drive</button></div></div>
+    <div class="car-body">
+      <div class="car-make">${car.make}</div>
+      <div class="car-name">${car.year} ${car.model}</div>
+      <div class="car-specs"><span class="sp"><span class="sp-dot"></span>${car.mileage}</span><span class="sp"><span class="sp-dot"></span>${car.transmission}</span><span class="sp"><span class="sp-dot"></span>${car.color}</span></div>
+      ${full&&car.description?`<div class="car-desc">${car.description}</div>`:''}
+      <div class="car-pr"><div class="price">$${Number(car.price).toLocaleString()}</div><button class="td-btn" onclick="openTD('${car.id}','${car.year} ${car.make} ${car.model}')">Test Drive</button></div>
+    </div></div>`;
+}
+async function loadFeat(){
+  try{const r=await fetch(API+'/api/cars');const d=await r.json();allCars=d.cars||[];const el=document.getElementById('featGrid');
+  if(!allCars.length){el.innerHTML='<div class="no-cars"><p style="font-size:2rem;margin-bottom:10px;">🚗</p><p>No cars yet — check back soon!</p></div>';return;}
+  el.innerHTML=allCars.slice(0,3).map(c=>cardHTML(c)).join('');counter('statCars',allCars.length);}catch(e){}
+}
+async function loadAll(){
+  try{const r=await fetch(API+'/api/cars');const d=await r.json();allCars=d.cars||[];renderGrid();}
+  catch{document.getElementById('allGrid').innerHTML='<div class="no-cars"><p>Failed to load. Check your connection.</p></div>';}
+}
+function renderGrid(){
+  const el=document.getElementById('allGrid');
+  const list=curFilter==='all'?allCars:allCars.filter(c=>c.category===curFilter);
+  if(!list.length){el.innerHTML='<div class="no-cars"><p style="font-size:2rem;margin-bottom:10px;">🚗</p><p>No cars in this category yet.</p></div>';return;}
+  el.innerHTML=list.map(c=>cardHTML(c,true)).join('');
+}
+function filterCars(cat,btn){curFilter=cat;document.querySelectorAll('#page-cars .filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGrid();}
+
+// TEST DRIVE
+function openTD(id,name){
+  if(!token){toast('Please sign in first!');showPage('auth');return;}
+  selCar=id;document.getElementById('modCar').textContent=name;
+  document.getElementById('tdForm').style.display='block';document.getElementById('tdSuc').style.display='none';
+  document.getElementById('tdDt').min=new Date().toISOString().split('T')[0];
+  document.getElementById('tdDt').value=new Date().toISOString().split('T')[0];
+  document.getElementById('tdModal').classList.add('open');
+}
+function closeModal(){document.getElementById('tdModal').classList.remove('open');}
+async function submitBooking(){
+  const name=document.getElementById('tdNm').value.trim(),date=document.getElementById('tdDt').value,time=document.getElementById('tdTm').value,notes=document.getElementById('tdNt').value;
+  if(!name){toast('Enter your name');return;}if(!date){toast('Pick a date');return;}
+  const btn=document.getElementById('tdBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Booking...';
+  try{
+    const r=await fetch(API+'/api/bookings',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({carId:selCar,name,date,time,notes})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error);
+    document.getElementById('tdForm').style.display='none';document.getElementById('tdSuc').style.display='block';
+  }catch(e){toast('Booking failed: '+e.message);}
+  btn.disabled=false;btn.innerHTML='Confirm Booking →';
+}
+
+// ADMIN
+function initAdm(){
+  if(admToken){showDash();}else{document.getElementById('admLogin').style.display='block';document.getElementById('admDash').style.display='none';}
+}
+async function admLogin(){
+  const pass=document.getElementById('admPass').value;
+  try{
+    const r=await fetch(API+'/api/auth/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pass})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error);
+    admToken=d.token;sessionStorage.setItem('tcs_admin',admToken);showDash();toast('Welcome, Tony! 🔑');
+  }catch(e){toast('Wrong password');}
+}
+function showDash(){
+  document.getElementById('admLogin').style.display='none';document.getElementById('admDash').style.display='block';
+  document.getElementById('admGreet').textContent='Welcome back, Tony — '+new Date().toLocaleDateString();
+  loadAdmCars();loadAdmBk();
+}
+function swTab(t,btn){
+  document.querySelectorAll('.adm-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById('tab-'+t).classList.add('active');
+  if(t==='manage')loadAdmCars();if(t==='bookings')loadAdmBk();if(t==='analytics')loadAnalytics();
+}
+function prevPhotos(input){const el=document.getElementById('phPrev');el.innerHTML='';Array.from(input.files).forEach(f=>{const u=URL.createObjectURL(f);const i=document.createElement('img');i.src=u;i.className='ph-th';el.appendChild(i);});}
+function doDrop(e){e.preventDefault();document.getElementById('upArea').classList.remove('drag');const dt=new DataTransfer();Array.from(e.dataTransfer.files).forEach(f=>dt.items.add(f));const inp=document.getElementById('photoIn');inp.files=dt.files;prevPhotos(inp);}
+async function addCar(){
+  const mk=document.getElementById('uMk').value.trim(),mo=document.getElementById('uMo').value.trim(),yr=document.getElementById('uYr').value,pr=document.getElementById('uPr').value;
+  if(!mk||!mo||!yr||!pr){toast('Fill in Make, Model, Year and Price');return;}
+  const btn=document.getElementById('addBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Uploading...';
+  const fd=new FormData();
+  fd.append('make',mk);fd.append('model',mo);fd.append('year',yr);fd.append('price',pr);
+  fd.append('mileage',document.getElementById('uMi').value||'N/A');
+  fd.append('category',document.getElementById('uCat').value);
+  fd.append('color',document.getElementById('uCo').value||'N/A');
+  fd.append('transmission',document.getElementById('uTr').value);
+  fd.append('description',document.getElementById('uDe').value);
+  Array.from(document.getElementById('photoIn').files).forEach(f=>fd.append('photos',f));
+  try{
+    const r=await fetch(API+'/api/cars',{method:'POST',headers:{'Authorization':'Bearer '+admToken},body:fd});
+    const d=await r.json();if(!r.ok)throw new Error(d.error);
+    ['uMk','uMo','uYr','uPr','uMi','uCo','uDe'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('phPrev').innerHTML='';document.getElementById('photoIn').value='';
+    toast('Car added! 🚗');loadAdmCars();
+  }catch(e){toast('Failed: '+e.message);}
+  btn.disabled=false;btn.innerHTML='+ Add to Inventory';
+}
+async function loadAdmCars(){
+  const el=document.getElementById('mnGrid');if(!el)return;
+  try{const r=await fetch(API+'/api/cars',{headers:{'Authorization':'Bearer '+admToken}});const d=await r.json();const cars=d.cars||[];
+  if(!cars.length){el.innerHTML='<p style="color:var(--gray)">No cars yet.</p>';return;}
+  el.innerHTML=cars.map(c=>`<div class="mn-card">
+    ${c.photos?.[0]?`<img class="mn-img" src="${c.photos[0]}" alt="${c.model}"/>`:`<div class="mn-ph">${emo(c.category)}</div>`}
+    <div class="mn-name">${c.year} ${c.make} ${c.model}</div>
+    <div class="mn-price">$${Number(c.price).toLocaleString()}</div>
+    <div style="color:var(--gray);font-size:0.74rem;margin-top:3px;">${c.mileage} · ${c.category}</div>
+    <div class="mn-actions"><button class="ac-btn">Edit</button><button class="del-btn" onclick="delCar('${c.id}')">Delete</button></div>
+  </div>`).join('');}catch{el.innerHTML='<p style="color:var(--gray)">Failed to load.</p>';}
+}
+async function delCar(id){if(!confirm('Delete this car?'))return;await fetch(API+'/api/cars/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+admToken}});toast('Removed');loadAdmCars();}
+async function loadAdmBk(){
+  const tbody=document.getElementById('bkBody'),noEl=document.getElementById('noBk');if(!tbody)return;
+  try{const r=await fetch(API+'/api/bookings',{headers:{'Authorization':'Bearer '+admToken}});const d=await r.json();const bks=d.bookings||[];
+  if(!bks.length){tbody.innerHTML='';noEl.style.display='block';return;}noEl.style.display='none';
+  tbody.innerHTML=bks.map(b=>`<tr>
+    <td><div style="color:var(--white);font-weight:500;">${b.customer_name}</div><div style="color:var(--gray);font-size:0.7rem;">${b.phone}</div></td>
+    <td style="color:var(--lightgray);">${b.car_name}</td><td style="color:var(--lightgray);">${b.date}</td><td style="color:var(--lightgray);">${b.time}</td>
+    <td><span class="s-badge s-${b.status}">${b.status}</span></td>
+    <td><button class="ac-btn" onclick="updBk('${b.id}','confirmed')">Confirm</button><button class="ac-btn" onclick="updBk('${b.id}','done')">Done</button></td>
+  </tr>`).join('');}catch{tbody.innerHTML='<tr><td colspan="6" style="color:var(--gray);text-align:center;">Failed to load.</td></tr>';}
+}
+async function updBk(id,status){await fetch(API+'/api/bookings/'+id,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+admToken},body:JSON.stringify({status})});loadAdmBk();toast('Updated!');}
+async function loadAnalytics(){
+  try{
+    const[vr,ur]=await Promise.all([fetch(API+'/api/analytics/views',{headers:{'Authorization':'Bearer '+admToken}}),fetch(API+'/api/analytics/visitors',{headers:{'Authorization':'Bearer '+admToken}})]);
+    const vd=await vr.json(),ud=await ur.json();
+    const views=vd.views||[],visitors=ud.visitors||[];
+    const uniq=[...new Set(visitors.map(v=>v.phone))];
+    document.getElementById('anStats').innerHTML=`
+      <div class="an-card"><div class="an-num">${views.length}</div><div class="an-lbl">Total Car Views</div></div>
+      <div class="an-card"><div class="an-num">${uniq.length}</div><div class="an-lbl">Unique Visitors</div></div>
+      <div class="an-card"><div class="an-num">${visitors.filter(v=>v.action==='logged_in').length}</div><div class="an-lbl">Sign Ins</div></div>`;
+    const tb=document.getElementById('vwBody'),no=document.getElementById('noVw');
+    if(!views.length){tb.innerHTML='';no.style.display='block';return;}no.style.display='none';
+    tb.innerHTML=views.map(v=>`<tr><td>${v.phone}</td><td>${v.cars?v.cars.year+' '+v.cars.make+' '+v.cars.model:'Unknown'}</td><td>${new Date(v.viewed_at).toLocaleString()}</td></tr>`).join('');
+  }catch(e){toast('Failed to load analytics');}
+}
+function counter(id,t){let n=0;const el=document.getElementById(id);if(!el)return;const s=Math.ceil(t/30);const i=setInterval(()=>{n=Math.min(n+s,t);el.textContent=n;if(n>=t)clearInterval(i);},50);}
+
+// Secret admin keyboard shortcut
+let ks='';
+document.addEventListener('keydown',e=>{ks+=e.key.toUpperCase();if(ks.includes('TONYADMIN')){ks='';showPage('admin');}if(ks.length>20)ks=ks.slice(-20);});
+
+updateNav();
+loadFeat();
+</script>
+</body>
+</html>
